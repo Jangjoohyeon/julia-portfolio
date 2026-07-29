@@ -4,103 +4,103 @@
     "title": "VŪM",
     "type": "image",
     "category": "AI IMAGE",
-    "src": "/assets/work/images/work-01.jpg",
+    "src": "assets/work/images/work-01.jpg",
     "alt": "AI 생성 패션 에디토리얼 — 앉은 자세의 모델, 브랜드 로고 삽입",
     "featured": true,
-    "link": "/assets/documents/portfolio.pdf"
+    "link": "assets/documents/portfolio.pdf"
   },
   {
     "id": "work-02",
     "title": "DYSTOPIA: the moon & RECOVERY",
     "type": "image",
     "category": "AI IMAGE",
-    "src": "/assets/work/images/work-02.jpg",
+    "src": "assets/work/images/work-02.jpg",
     "alt": "하이패션 에디토리얼 컨셉의 AI 생성 인물 사진",
     "featured": true,
-    "link": "/work-02.html"
+    "link": "work-02.html"
   },
   {
     "id": "work-03",
     "title": "RUNNING WITH JESS — EP. 01",
     "type": "image",
     "category": "AI MOTION",
-    "src": "/assets/work/images/work-03.jpg",
+    "src": "assets/work/images/work-03.jpg",
     "alt": "단편 필름 'Running with Jess' EP.01 포스터 — TOVEN 골전도 이어폰 착용 인물, A SHORT FILM BY TOVEN",
     "featured": false,
     "orientation": "portrait",
-    "link": "/work-03.html"
+    "link": "work-03.html"
   },
   {
     "id": "work-04",
     "title": "Disco fever",
     "type": "image",
     "category": "AI IMAGE",
-    "src": "/assets/work/images/work-04.jpg",
+    "src": "assets/work/images/work-04.jpg",
     "alt": "일러스트 과제 — 콘셉트 리디자인 작업",
     "featured": false,
     "orientation": "portrait",
-    "link": "/assets/documents/portfolio-1620.pdf"
+    "link": "assets/documents/portfolio-1620.pdf"
   },
   {
     "id": "work-05",
     "title": "Bow Lighter Holder Earring",
     "type": "image",
     "category": "AI IMAGE",
-    "src": "/assets/work/images/work-05.jpg",
+    "src": "assets/work/images/work-05.jpg",
     "alt": "iclearrrr 프로젝트 비주얼",
     "featured": false,
     "orientation": "portrait",
-    "link": "/work-05.html"
+    "link": "work-05.html"
   },
   {
     "id": "work-06",
     "title": "오늘은 IPA다!",
     "type": "image",
     "category": "AI IMAGE",
-    "src": "/assets/work/images/work-06.jpg",
+    "src": "assets/work/images/work-06.jpg",
     "alt": "맥주 프로젝트 제품 소개 포스터 — IPA 광고 카피 '오늘은 IPA다! 딱 기분 좋을 때', 잔에 따르는 맥주 사진",
     "featured": false,
     "orientation": "portrait",
-    "link": "/assets/documents/portfolio-2021.pdf"
+    "link": "assets/documents/portfolio-2021.pdf"
   },
   {
     "id": "work-07",
     "title": "LEGODT",
     "type": "image",
     "category": "AI IMAGE",
-    "src": "/assets/work/images/work-07.jpg",
+    "src": "assets/work/images/work-07.jpg",
     "alt": "legodt 무드보드",
     "featured": true,
-    "link": "/assets/documents/portfolio-15.pdf"
+    "link": "assets/documents/portfolio-15.pdf"
   },
   {
     "id": "work-08",
     "title": "Not This Time",
     "type": "image",
     "category": "AI IMAGE",
-    "src": "/assets/work/images/work-08.jpg",
+    "src": "assets/work/images/work-08.jpg",
     "alt": "AI 생성 이미지 렌더",
     "featured": true,
-    "link": "/work-08.html"
+    "link": "work-08.html"
   },
   {
     "id": "work-09",
     "title": "해결설비",
     "type": "image",
     "category": "AI IMAGE",
-    "src": "/assets/work/images/work-09.png",
+    "src": "assets/work/images/work-09.png",
     "alt": "Placeholder artwork 09",
     "featured": true,
-    "link": "/work-09.html"
+    "link": "work-09.html"
   },
   {
     "id": "work-10",
     "title": "법률사무소 선진",
     "type": "image",
     "category": "AI IMAGE",
-    "src": "/assets/work/images/work-10.png",
+    "src": "assets/work/images/work-10.png",
     "alt": "Placeholder artwork 10",
     "featured": true,
-    "link": "/portfolio-10.html"
+    "link": "portfolio-10.html"
   }
 ]
