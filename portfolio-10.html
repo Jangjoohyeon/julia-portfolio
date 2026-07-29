@@ -1,0 +1,153 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>JULIA — Portfolio</title>
+<meta name="description" content="아임웹 기반 웹페이지 제작 및 HTML을 활용한 웹 요소 구현 — 라이브 사이트 임베드 페이지.">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@0,9..144,300;0,9..144,500;0,9..144,600;0,9..144,700;1,9..144,500&family=JetBrains+Mono:ital,wght@0,400;0,500;0,700;0,800;1,400&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --bg-light: #F3E7D3;
+    --ink-on-light: #2A1D17;
+    --accent: #DFA6A8;
+    --font-display: "Fraunces", Georgia, serif;
+    --font-mono: "JetBrains Mono", "IBM Plex Mono", ui-monospace, monospace;
+  }
+
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+
+  html, body { height: 100%; }
+
+  body {
+    display: flex;
+    flex-direction: column;
+    background: var(--bg-light);
+    color: var(--ink-on-light);
+  }
+
+  .p10-header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 1rem;
+    flex: 0 0 auto;
+    padding: 0.85rem 1.5rem;
+    background: var(--bg-light);
+    border-bottom: 1px solid rgba(42, 29, 23, 0.15);
+  }
+
+  .p10-back {
+    flex: 0 0 auto;
+    font-family: var(--font-mono);
+    font-size: 0.78rem;
+    letter-spacing: 0.05em;
+    text-transform: uppercase;
+    color: var(--ink-on-light);
+    text-decoration: none;
+    white-space: nowrap;
+  }
+
+  .p10-back:hover,
+  .p10-back:focus-visible { text-decoration: underline; }
+
+  .p10-title {
+    flex: 1 1 auto;
+    min-width: 0;
+    margin: 0 1rem;
+    font-family: var(--font-display);
+    font-size: clamp(0.8rem, 1.5vw, 1.05rem);
+    font-weight: 600;
+    text-align: center;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+  }
+
+  .p10-visit {
+    flex: 0 0 auto;
+    font-family: var(--font-mono);
+    font-size: 0.72rem;
+    letter-spacing: 0.05em;
+    text-transform: uppercase;
+    background: var(--accent);
+    color: var(--ink-on-light);
+    text-decoration: none;
+    padding: 0.5rem 0.95rem;
+    border-radius: 999px;
+    white-space: nowrap;
+    transition: opacity 0.15s ease;
+  }
+
+  .p10-visit:hover,
+  .p10-visit:focus-visible { opacity: 0.78; }
+
+  .p10-frame-wrap {
+    position: relative;
+    flex: 1 1 auto;
+    min-height: 0;
+  }
+
+  .p10-frame-wrap iframe {
+    display: block;
+    width: 100%;
+    height: 100%;
+    border: 0;
+  }
+
+  .p10-fallback {
+    position: absolute;
+    inset: 0;
+    display: none;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    gap: 1.25rem;
+    padding: 2rem;
+    text-align: center;
+    background: var(--bg-light);
+  }
+
+  .p10-fallback.is-visible { display: flex; }
+
+  .p10-fallback p {
+    max-width: 32rem;
+    font-family: var(--font-mono);
+    font-size: 0.9rem;
+    line-height: 1.7;
+    opacity: 0.8;
+  }
+
+  @media (max-width: 640px) {
+    .p10-title { display: none; }
+  }
+</style>
+</head>
+<body>
+  <header class="p10-header">
+    <a class="p10-back" href="/#work">← Back</a>
+    <p class="p10-title">아임웹 기반 웹페이지 제작 및 HTML을 활용한 웹 요소 구현</p>
+    <a class="p10-visit" href="https://law-seonjin.co.kr/" target="_blank" rel="noopener noreferrer">Visit Live Site ↗</a>
+  </header>
+
+  <div class="p10-frame-wrap">
+    <iframe id="p10-iframe" src="https://law-seonjin.co.kr/" title="법무법인 선진 라이브 웹사이트" referrerpolicy="no-referrer-when-downgrade"></iframe>
+    <div class="p10-fallback" id="p10-fallback">
+      <p>이 사이트는 보안 정책상 페이지 안에 바로 표시할 수 없습니다.<br>아래 버튼을 눌러 새 탭에서 확인해주세요.</p>
+      <a class="p10-visit" href="https://law-seonjin.co.kr/" target="_blank" rel="noopener noreferrer">사이트 바로가기 ↗</a>
+    </div>
+  </div>
+
+  <script>
+    const iframe = document.getElementById('p10-iframe');
+    const fallback = document.getElementById('p10-fallback');
+    let loaded = false;
+    iframe.addEventListener('load', () => { loaded = true; });
+    setTimeout(() => {
+      if (!loaded) fallback.classList.add('is-visible');
+    }, 3000);
+  </script>
+</body>
+</html>

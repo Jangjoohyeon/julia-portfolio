@@ -1,0 +1,17 @@
+# 사이트에서 실제로 쓰이지 않는 원본/스크린샷/작업 파일 — 로컬 참고용으로만 보관
+0531 (1)-복사.png
+JULIA — AI Visual Designer Portfolio.png
+ffc3ded599cb06561a98479231407126.jpg
+hf_20260728_120507_afeb1b42-85ea-40cc-9f45-40221b6724fe.mp4
+militaryscribe.ttf
+스크린샷 *.png
+Not This Time.mp4
+장주현_무빙포스터_블렌더.mp4
+장주현_최종 마린세르.mp4
+
+# OS
+Thumbs.db
+.DS_Store
+
+# Claude Code local settings (도구 사용 이력, 사이트 콘텐츠 아님)
+.claude/

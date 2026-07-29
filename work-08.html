@@ -1,0 +1,31 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>JULIA — Portfolio</title>
+<meta name="description" content="AI 생성 이미지 렌더 프로젝트 — 영상과 포트폴리오 PDF를 이어붙인 전용 페이지.">
+<link rel="stylesheet" href="css/portfolio-page.css">
+</head>
+<body class="pf-page-dark">
+
+<main class="pf-page">
+  <video class="pf-media" autoplay muted loop playsinline disablePictureInPicture disableRemotePlayback
+    aria-label="AI 생성 이미지 프로젝트 영상 — Not This Time">
+    <source src="assets/documents/portfolio5-video.mp4" type="video/mp4">
+  </video>
+  <img class="pf-media pf-full-bleed" src="assets/documents/portfolio5-pages/page-1.jpg" alt="포트폴리오 PDF 1페이지">
+  <img class="pf-media pf-full-bleed" src="assets/documents/portfolio5-pages/page-2.jpg" alt="포트폴리오 PDF 2페이지">
+</main>
+
+<script>
+  const v = document.querySelector('.pf-media[autoplay]');
+  if (v) {
+    v.play().catch(() => {});
+    document.addEventListener('visibilitychange', () => {
+      if (!document.hidden) v.play().catch(() => {});
+    });
+  }
+</script>
+</body>
+</html>

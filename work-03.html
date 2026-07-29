@@ -1,0 +1,33 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>JULIA — Portfolio</title>
+<meta name="description" content="TOVEN 브랜드 필름 프로젝트 — 영상과 포트폴리오 PDF를 이어붙인 전용 페이지.">
+<link rel="stylesheet" href="css/portfolio-page.css">
+</head>
+<body class="pf-page-dark">
+
+<main class="pf-page">
+  <video class="pf-media pf-media--compact" autoplay muted loop playsinline disablePictureInPicture disableRemotePlayback
+    aria-label="TOVEN 브랜드 필름 영상">
+    <source src="assets/documents/portfolio4-video.mp4" type="video/mp4">
+  </video>
+  <img class="pf-media pf-full-bleed" src="assets/documents/portfolio4-pages/page-1.jpg" alt="포트폴리오 PDF 1페이지 — TOVEN 브랜드 필름 프로젝트 소개">
+  <img class="pf-media pf-full-bleed" src="assets/documents/portfolio4-pages/page-2.jpg" alt="포트폴리오 PDF 2페이지">
+  <img class="pf-media pf-full-bleed" src="assets/documents/portfolio4-pages/page-3.jpg" alt="포트폴리오 PDF 3페이지">
+  <img class="pf-media pf-full-bleed" src="assets/documents/portfolio4-pages/page-4.jpg" alt="포트폴리오 PDF 4페이지">
+</main>
+
+<script>
+  const v = document.querySelector('.pf-media[autoplay]');
+  if (v) {
+    v.play().catch(() => {});
+    document.addEventListener('visibilitychange', () => {
+      if (!document.hidden) v.play().catch(() => {});
+    });
+  }
+</script>
+</body>
+</html>

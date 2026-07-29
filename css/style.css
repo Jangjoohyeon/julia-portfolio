@@ -1,0 +1,847 @@
+/* ==========================================================================
+   JULIA — Portfolio
+   Color palette extracted from reference photo (see CLAUDE.md §2.1)
+   ========================================================================== */
+
+:root {
+  --bg-light: #F3E7D3;
+  --bg-dark: #1F1512;
+  --accent: #DFA6A8;
+  --accent-secondary: #C9A64F;
+  --accent-secondary-text: #79642F; /* darkened for WCAG AA text contrast on --bg-light (4.67:1); use --accent-secondary itself only for non-text/decorative accents */
+  --ink-on-light: #2A1D17;
+  --ink-on-dark: #F3E7D3;
+
+  --font-display: "Fraunces", Georgia, serif;
+  --font-mono: "JetBrains Mono", "IBM Plex Mono", ui-monospace, monospace;
+  --font-hero: "Military Scribe", "Fraunces", Georgia, serif;
+
+  --header-h: clamp(64px, 8vw, 88px);
+}
+
+/* Hero wordmark font — subset to basic Latin + WOFF2 only (621KB -> 27KB).
+   font-display:swap + <link rel="preload"> in <head> keep the FOUT window
+   short instead of hiding the text (FOIT) while it loads. */
+@font-face {
+  font-family: "Military Scribe";
+  src: url("../assets/fonts/militaryscribe.woff2") format("woff2");
+  font-weight: 400;
+  font-style: normal;
+  font-display: swap;
+}
+
+* { box-sizing: border-box; }
+
+html { scroll-behavior: smooth; }
+
+body {
+  margin: 0;
+  background: #4D4237;
+  color: var(--ink-on-dark);
+  font-family: var(--font-mono);
+  -webkit-font-smoothing: antialiased;
+  overflow-x: hidden;
+}
+
+img, video { max-width: 100%; display: block; }
+
+a { color: inherit; }
+
+ul { list-style: none; margin: 0; padding: 0; }
+
+blockquote { margin: 0; }
+
+.display {
+  font-family: var(--font-display);
+  font-weight: 600;
+  line-height: 0.95;
+  letter-spacing: -0.01em;
+  margin: 0;
+}
+
+.mono-label {
+  font-family: var(--font-mono);
+  font-size: clamp(0.7rem, 1vw, 0.85rem);
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  font-weight: 500;
+  margin: 0;
+}
+
+/* Section background rhythm (§2.1 / §2.3) --------------------------------- */
+
+section[data-bg="light"] { background: var(--bg-light); color: var(--ink-on-light); }
+section[data-bg="dark"]  { background: var(--bg-dark);  color: var(--ink-on-dark); }
+section[data-bg="accent"] { background: var(--accent);  color: var(--ink-on-light); }
+
+/* ==========================================================================
+   Header / nav
+   ========================================================================== */
+
+.site-header {
+  position: fixed;
+  inset: 0 0 auto 0;
+  height: var(--header-h);
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 0 clamp(1.25rem, 4vw, 2.5rem);
+  z-index: 100;
+  background: rgba(31, 21, 18, 0.7);
+  backdrop-filter: blur(8px);
+  -webkit-backdrop-filter: blur(8px);
+  color: var(--ink-on-dark);
+  pointer-events: none;
+}
+
+.site-header > * { pointer-events: auto; }
+
+.logo {
+  font-family: var(--font-display);
+  font-weight: 700;
+  font-size: clamp(1.1rem, 2vw, 1.4rem);
+  text-decoration: none;
+  letter-spacing: 0.02em;
+}
+
+.site-nav {
+  display: flex;
+  gap: clamp(1.25rem, 2.5vw, 2.5rem);
+  font-family: var(--font-mono);
+  font-weight: 800;
+  font-size: 0.78rem;
+  letter-spacing: 0.12em;
+}
+
+.site-nav a { text-decoration: none; }
+
+.hamburger {
+  display: none;
+  flex-direction: column;
+  justify-content: center;
+  gap: 5px;
+  width: 44px;
+  height: 44px;
+  background: none;
+  border: none;
+  cursor: pointer;
+  padding: 0;
+}
+
+.hamburger span {
+  display: block;
+  width: 22px;
+  height: 2px;
+  background: currentColor;
+  margin: 0 auto;
+  transition: transform 0.25s ease, opacity 0.25s ease;
+}
+
+.hamburger[aria-expanded="true"] span:nth-child(1) { transform: translateY(7px) rotate(45deg); }
+.hamburger[aria-expanded="true"] span:nth-child(2) { opacity: 0; }
+.hamburger[aria-expanded="true"] span:nth-child(3) { transform: translateY(-7px) rotate(-45deg); }
+
+/* ==========================================================================
+   Hero
+   ========================================================================== */
+
+.hero {
+  position: relative;
+  min-height: 100svh;
+  padding: 0;
+  overflow: hidden;
+}
+
+/* Full-bleed photo hero — real asset per Figma node 13:70, see CLAUDE.md §0. */
+.hero-photo {
+  position: absolute;
+  inset: 0;
+}
+
+.hero-photo img,
+.hero-photo video {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  pointer-events: none;
+}
+
+/* ==========================================================================
+   Gen-Window showcase (moved out of Hero so the photo can be full-bleed)
+   ========================================================================== */
+
+/* Clicking the ABOUT nav link scrolls to #about (the straddle wrapper
+   above this section); at that scroll position this section's own top
+   still sits a few hundred px below the viewport top (the About card
+   content is what fills that gap). 100svh comfortably covers the rest
+   down to the viewport bottom with room to spare (verified via
+   getBoundingClientRect at the #about-anchored scroll position — no
+   next-section bleed), so no extra buffer is needed. */
+.gen-showcase {
+  position: relative;
+  min-height: 100svh;
+  overflow: hidden;
+}
+
+/* 2026-07-28: 사용자 요청으로 배경색만 고정 (data-bg="dark" 공용 규칙 override) */
+.gen-showcase[data-bg="dark"] {
+  background: #4D4237;
+}
+
+.hero-gen-windows {
+  position: absolute;
+  inset: 0;
+  z-index: 1;
+}
+
+.gen-window {
+  position: absolute;
+  width: clamp(190px, 20vw, 380px);
+  background: #000;
+  border-radius: 0;
+  overflow: hidden;
+  box-shadow: 0 30px 60px rgba(0,0,0,0.45);
+  opacity: 1;
+  touch-action: none;
+}
+
+/* Evenly cascaded, axis-aligned (no rotation) — positions per Figma node 11:33.
+   2026-07-28: cluster shifted further down (+5%p on top of the previous
+   pass) — same relative stagger between windows throughout. */
+.gen-window--a { top: 35%; left: 19.79%; z-index: 1; }
+.gen-window--b { top: 27.54%; left: 33.96%; z-index: 2; }
+.gen-window--c { top: 35%; left: 49.84%; z-index: 3; }
+.gen-window--d { top: 29.55%; left: 65.05%; z-index: 4; }
+
+/* Draggable hero windows (desktop / fine pointer only, §2.4) --------------- */
+
+@media (hover: hover) and (pointer: fine) {
+  .gen-window[data-draggable] { cursor: grab; }
+  .gen-window[data-draggable].is-dragging {
+    cursor: grabbing;
+    transform: none;
+    transition: none;
+    box-shadow: 0 40px 80px rgba(0,0,0,0.55);
+  }
+}
+
+.gen-window-bar {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  padding: 0.4rem 0.6rem;
+  background: #17110f;
+}
+
+.traffic-lights { display: flex; gap: 5px; }
+.traffic-lights i {
+  width: 8px; height: 8px; border-radius: 50%; display: block;
+}
+.traffic-lights i:nth-child(1) { background: #e0605a; }
+.traffic-lights i:nth-child(2) { background: #e0b04f; }
+.traffic-lights i:nth-child(3) { background: #7fbf6a; }
+
+.gen-filename {
+  font-family: var(--font-mono);
+  font-size: 0.62rem;
+  letter-spacing: 0.02em;
+  color: #cbb8a8;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+/* 2026-07-28: 사용자 요청으로 16:9 고정 비율로 재변경 (직전엔 각 영상의
+   네이티브 비율에 맞췄었음 — 아래 object-fit:cover가 남는 부분을 크롭). */
+.gen-window-body { position: relative; width: 100%; aspect-ratio: 16 / 9; }
+
+.gen-window-body video,
+.gen-window-body img {
+  width: 100%; height: 100%; object-fit: cover; display: block;
+  pointer-events: none;
+}
+
+.scroll-cue {
+  position: absolute;
+  bottom: clamp(1.5rem, 4vw, 3rem);
+  left: 50%;
+  transform: translateX(-50%);
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 0.5rem;
+  font-size: 0.68rem;
+  letter-spacing: 0.2em;
+  z-index: 2;
+  color: var(--ink-on-dark);
+}
+
+.scroll-cue-line {
+  width: 1px;
+  height: 32px;
+  background: currentColor;
+  opacity: 0.6;
+  animation: scroll-pulse 1.8s ease-in-out infinite;
+}
+
+@keyframes scroll-pulse {
+  0%, 100% { transform: scaleY(0.4); opacity: 0.3; }
+  50% { transform: scaleY(1); opacity: 0.8; }
+}
+
+/* ==========================================================================
+   Interactive Photo — merged in-page section (§3.1)
+   Self-contained sub-design system (own palette/type tokens below), scoped
+   entirely under #interactive so it can't collide with the rest of the site.
+   All rules/classes/ids here are prefixed `ip-` for the same reason.
+   ========================================================================== */
+
+#interactive {
+  height: 100vh;
+  padding-top: var(--header-h);
+  box-sizing: border-box;
+  overflow-y: auto;
+  background: #FFFFFF;
+  color: var(--cream);
+  font-family: var(--grot);
+
+  --espresso:#100C0B; --cream:#F3E9DA; --red:#E32B32;
+  --mint:#A9E3C6; --pink:#EEC3CC; --cosmo:#B93764;
+  --serif:'Instrument Serif', Didot, 'Bodoni MT', serif;
+  --grot:'Space Grotesk', sans-serif;
+}
+
+#interactive * { margin: 0; padding: 0; box-sizing: border-box; }
+
+/* 2026-07 Figma 동기화(node 11:96): 이 프레임엔 핫스팟/패널 레이어가 없고
+   "포토 페이지 + 검정 페이지"로 구성된 노트북 스프레드 목업 이미지 한 장뿐이었다
+   (1264x848, 1920 프레임 안에 328px씩 여백을 두고 중앙 정렬). 색상 변수는 MCP
+   호출 한도에 걸려 못 받아왔다. 사용자 선택에 따라 이 스프레드 이미지 전체를
+   무대 배경으로 쓰고, 기존 텍스트 패널은 이미지 오른쪽(검정 페이지) 위에
+   오버레이하는 구조로 재구성했다 — 핫스팟/패널 전환 기능(js/main.js)은 그대로. */
+/* 2026-07-29: 사용자 요청으로 이미지를 줄이고 위쪽에 붙여서, 줄어든 만큼의
+   여유 공간이 아래쪽에 남도록 했다(margin:0 auto로 세로 auto-margin을 없애야
+   align-items:flex-start가 실제로 적용된다 — flex item의 margin:auto는
+   align-items보다 우선하므로). 셀렉터를 `#interactive .ip-stage-wrap`처럼
+   ID를 포함시켜야 하는 이유: 위쪽 `#interactive * { margin:0; padding:0; }`
+   리셋 규칙이 ID 특정도(specificity)를 갖고 있어서, 클래스 셀렉터 단독으로는
+   순서와 무관하게 이 padding/margin 값이 조용히 무시돼버린다. */
+#interactive .ip-stage-wrap { height:100%; display:flex; align-items:flex-start; justify-content:center; padding:7vh 2vw 4vh; box-sizing:border-box; }
+
+#interactive .ip-stage { position:relative; width:min(75vw, 108vh); aspect-ratio:1264/848; margin:0 auto; }
+
+/* ─── 사진(왼쪽 페이지) + 핫스팟 ─── */
+.ip-photo-crop { position:absolute; inset:0; border-radius:6px; overflow:hidden; }
+.ip-photo-base { position:absolute; inset:0; width:100%; height:100%; object-fit:cover; display:block; }
+
+.ip-spot {
+  position:absolute; background:none; border:none; padding:0; cursor:pointer;
+  transition: transform .32s cubic-bezier(.2,.8,.2,1), filter .32s ease;
+  transform-origin:center; z-index:2;
+}
+.ip-spot img { width:100%; height:100%; display:block; pointer-events:none; }
+.ip-spot:hover, .ip-spot:focus-visible {
+  transform: scale(1.08); z-index:5;
+  filter: drop-shadow(0 14px 30px rgba(0,0,0,.55));
+}
+.ip-spot:focus-visible { outline:2px solid var(--mint); outline-offset:4px; border-radius:10px; }
+.ip-spot.active { transform: scale(1.05); filter: drop-shadow(0 10px 24px rgba(0,0,0,.5)); }
+
+/* 2026-07-28: 새 스프레드 이미지에서 각 오브젝트를 실제로 누끼 따서(rembg
+   배경 제거 + 잔여 배경 수동 정리) .ip-spot img로 넣었다. 좌표는 각 컷아웃의
+   알파 채널 바운딩 박스를 1264x848 스테이지 기준 %로 환산한 값. */
+#ip-spot-phone { left:0.32%; top:6.13%; width:12.97%; height:30.66%; }
+#ip-spot-magazine { left:6.33%; top:52.12%; width:14.24%; height:17.22%; }
+#ip-spot-cocktail { left:15.90%; top:69.69%; width:11.63%; height:25.00%; }
+#ip-spot-bag { left:36.23%; top:43.16%; width:10.28%; height:17.45%; }
+
+/* ─── 폰 클릭 시 뜨는 인스타그램 배지 ───
+   2026-07-29: 배경 이미지에 박힌 "Touch The Items" 글씨 영역을 정확히 덮는
+   크기/위치의 흰 사각형. 좌표는 1264×848 전체 스테이지 기준으로 그 텍스트의
+   실제 픽셀 경계를 측정해서 계산했다(밝기 임계값으로 텍스트만 분리 →
+   바운딩 박스 → %). `.ip-panel-col`(53~96%) 안에 넣으면 그 박스 기준
+   좌표계가 되어버려 정확히 안 맞으므로, `.ip-stage`의 바로 아래 형제로 둬서
+   핫스팟(`.ip-spot`)과 동일한 좌표계를 쓰게 했다. `.ip-page` 클래스를 그대로
+   써서 기존 클릭→`.on` 토글 로직(js/main.js)에 그대로 올라탄다. */
+.ip-ig-badge {
+  position:absolute; left:68.43%; top:35.26%; width:12.82%; height:29.01%;
+  background:#fff; border-radius:2px; z-index:3;
+  display:flex; flex-direction:column; align-items:center; justify-content:center; gap:clamp(4px,1vh,10px);
+  text-decoration:none; color:#1a1a1a; cursor:pointer;
+  box-shadow:0 4px 14px rgba(0,0,0,.35);
+  transition:transform .25s ease;
+}
+/* 2026-07-29 버그 수정: `.ip-page.on{display:block}`이 클래스 2개짜리라
+   `.ip-ig-badge`의 `display:flex`(클래스 1개)보다 특정도가 높아서, 배지가
+   `.on` 상태일 때 조용히 block으로 바뀌어 세로 중앙 정렬이 깨지고 있었다.
+   ID 셀렉터로 특정도를 확실히 올려서 flex를 지켜준다. */
+#ip-page-phone.on { display:flex; }
+.ip-ig-badge:hover, .ip-ig-badge:focus-visible { transform:scale(1.03); }
+.ip-ig-badge-icon {
+  width:clamp(20px,3.2vh,32px); height:clamp(20px,3.2vh,32px); border-radius:8px;
+  display:flex; align-items:center; justify-content:center; color:#fff;
+  background:linear-gradient(135deg,#4f5bd5,#962fbf 30%,#d62976 55%,#fa7e1e 75%,#feda75 100%);
+}
+.ip-ig-badge-icon svg { width:60%; height:60%; }
+/* 2026-07-29: 메인 사이트 About 카드(`.about-quote`)와 동일하게 JetBrains
+   Mono Italic으로 통일 — 같은 전역 `--font-mono` 변수를 그대로 참조한다
+   (#interactive가 자체 팔레트/폰트 변수를 쓰지만 전역 변수를 가리는 건
+   아니라서 그대로 상속돼 쓸 수 있다). */
+.ip-ig-badge-handle { font-family:var(--font-mono); font-style:italic; font-weight:400; font-size:clamp(9px,1.3vh,13px); letter-spacing:.01em; }
+
+@media (max-width:767px) {
+  .ip-ig-badge {
+    position:static; width:auto; height:auto; left:auto; top:auto;
+    flex-direction:row; gap:10px; padding:14px 18px; margin:16px 0 0; border-radius:8px;
+  }
+  .ip-ig-badge-icon { width:28px; height:28px; }
+  .ip-ig-badge-handle { font-size:13px; }
+}
+
+/* ─── 오른쪽(검정 페이지) 위에 얹히는 콘텐츠 패널 ─── */
+.ip-panel-col {
+  position:absolute; left:53%; right:4%; top:6%; bottom:6%;
+  display:flex; flex-direction:column;
+}
+.ip-panel-head { padding:0 0 clamp(10px,2vh,20px); display:flex; justify-content:flex-end; align-items:baseline; }
+.ip-panel-head .ip-idx { font-family:var(--serif); font-style:italic; font-size:20px; opacity:.5; }
+
+.ip-panel-body { flex:1; display:flex; flex-direction:column; justify-content:center; min-height:0; }
+.ip-page { display:none; animation:ip-fadeUp .5s ease both; }
+.ip-page.on { display:block; }
+@keyframes ip-fadeUp { from { opacity:0; transform:translateY(14px); } to { opacity:1; transform:none; } }
+
+/* 2026-07-29: 사용자 요청으로 각 페이지(인트로 + 4개 오브젝트)의 텍스트/그래픽을
+   전부 비웠다 — 클릭 시 핫스팟 active 상태 전환, 페이지 .on 전환, 인덱스 숫자
+   갱신 같은 상호작용 로직(js/main.js)은 그대로 유지되고, 페이지 자체는 빈
+   div만 남는다. 이전에 여기 있던 콘텐츠별 스타일(.ip-page h2/.ip-sub,
+   .ip-media, .ip-g-bag/mag/cock/phone, .ip-ig-card, .ip-intro h2/p/.ip-hint
+   등)은 전부 제거했다 — 다시 콘텐츠를 채우게 되면 필요한 스타일을 새로 작성할 것.
+
+/* ==========================================================================
+   Work Gallery
+   ========================================================================== */
+
+.work {
+  /* 2026-07-29: 하단에만 약간의 여백을 추가 (top/left-right는 그대로, bottom만 살짝 키움) — 소폭 재조정 */
+  padding: clamp(4rem, 8vw, 7rem) clamp(1.25rem, 4vw, 2.5rem) clamp(7.5rem, 12vw, 11rem);
+}
+
+/* 2026-07-28: 사용자 요청으로 배경색만 고정 (data-bg="light" 공용 규칙 override).
+   섹션 자체가 밝은(light) 텍스트 색(--ink-on-light, 어두운 브라운)을 쓰도록
+   되어 있었는데 배경이 어두워졌으므로, 이 섹션 안의 텍스트만 밝은 아이보리로
+   같이 조정한다(이미지/영상/레이아웃은 그대로). */
+#work {
+  background: #4D4237;
+  color: var(--ink-on-dark);
+}
+
+#work .work-card .category {
+  color: var(--ink-on-dark);
+  opacity: 0.75;
+}
+
+.section-head { margin-bottom: clamp(2rem, 5vw, 3.5rem); }
+
+/* 4-column base grid. `featured:true` cards span 2 columns (same visual size
+   as before — landscape 21/10), so 01/02/07/08/09/10/11/12 stay untouched.
+   03/04/05/06 stay unspanned (1 column) and portrait, sitting 4-to-a-row —
+   2026-07 재개정 6차. See CLAUDE.md §2.4. */
+.work-grid {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: clamp(1rem, 2vw, 1.75rem);
+  align-items: start;
+}
+
+.work-card {
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  gap: 0.75rem;
+  cursor: pointer;
+}
+
+.work-card .media {
+  position: relative;
+  overflow: hidden;
+  aspect-ratio: 21 / 10;
+  background: var(--bg-dark);
+}
+
+/* 2026-07-29: works.json의 "link" 필드가 있는 카드(예: work-01 → PDF 포트폴리오)는
+   이미지가 <a class="media-link"> 안에 들어간다 — .media를 감싸기만 하는
+   투명한 블록 래퍼라 .media 자체의 aspect-ratio/overflow는 그대로 적용된다. */
+.work-card .media-link { display: block; cursor: pointer; }
+
+/* Featured cards span 2 of the 4 columns — this is how 01/02/07/08/09/10/11/12
+   keep their previous (larger, landscape) size while 03/04/05/06 stay single-
+   column and portrait. */
+.work-card[data-featured="true"] {
+  grid-column: span 2;
+}
+
+/* work-04 / work-05 are genuinely portrait source images — give them a
+   taller card instead of forcing the shared landscape ratio (§2.4). */
+.work-card[data-orientation="portrait"] .media {
+  aspect-ratio: 4 / 5;
+}
+
+.work-card .media img,
+.work-card .media video {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  transition: transform 0.6s cubic-bezier(0.2, 0.6, 0.2, 1);
+}
+
+@media (hover: hover) and (pointer: fine) {
+  .work-card:hover .media img,
+  .work-card:hover .media video { transform: scale(1.04); }
+}
+
+.work-card .meta {
+  display: flex;
+  flex-direction: column;
+  gap: 0.35rem;
+}
+
+.work-card .category {
+  font-family: var(--font-mono);
+  font-size: 0.68rem;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  color: var(--accent-secondary-text);
+  white-space: nowrap;
+}
+
+.work-card .title {
+  font-family: var(--font-mono);
+  font-weight: 700;
+  font-size: 0.78rem;
+  letter-spacing: 0.02em;
+  margin: 0;
+  opacity: 0.85;
+}
+
+.play-affordance {
+  position: absolute;
+  inset: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: rgba(31, 21, 18, 0.35);
+  border: none;
+  padding: 0;
+  cursor: pointer;
+  color: #fff;
+}
+
+.play-affordance::before {
+  content: "";
+  width: 0; height: 0;
+  border-style: solid;
+  border-width: 12px 0 12px 20px;
+  border-color: transparent transparent transparent currentColor;
+  margin-left: 4px;
+}
+
+.work-card.is-playing .play-affordance { display: none; }
+
+/* Grain overlay (§2.4) ----------------------------------------------------- */
+
+.grain::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+  opacity: 0.18;
+  mix-blend-mode: overlay;
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='120' height='120'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.85' numOctaves='2' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E");
+}
+
+.work-card .media { position: relative; }
+.work-card .media::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+  opacity: 0.12;
+  mix-blend-mode: overlay;
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='120' height='120'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.85' numOctaves='2' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E");
+}
+
+/* ==========================================================================
+   About (straddle card)
+   ========================================================================== */
+
+/* Not a full section — a thin transparent wrapper sitting between Hero and
+   the Gen-Window showcase as its own sibling, so neither neighbour's
+   `overflow` can clip the card that overlaps them (§2.5). */
+.about-straddle {
+  position: relative;
+  z-index: 3;
+  padding: 0 clamp(1.5rem, 4vw, 3rem);
+}
+
+.about-card {
+  position: relative;
+  background: var(--bg-light);
+  color: var(--ink-on-light);
+  max-width: 46.875rem; /* 750px, per Figma node 11:259 */
+  margin-left: auto;
+  margin-top: clamp(-8rem, -13vw, -15rem);
+  margin-bottom: clamp(-3rem, -8vw, -9rem);
+  padding: clamp(1.75rem, 5vw, 3.5rem); /* 56px per Figma */
+  display: flex;
+  flex-direction: column;
+  gap: clamp(1.25rem, 3vw, 1.75rem); /* 28px per Figma */
+  box-shadow: 0 24px 30px rgba(0,0,0,0.25); /* per Figma node 11:259 drop-shadow */
+}
+
+/* 2026-07-29: Work↔Contact 경계에 걸치는 두 번째 스트래들 카드(§4절 규칙 참고 —
+   `.about-straddle`/`.about-card`/`.about-quote`/`.mono-label`을 그대로
+   재사용해서 첫 번째 스트래들 카드와 스타일이 100% 동일하게 유지되도록 했다).
+   유일한 차이는 좌우 위치 — About 카드는 오른쪽(margin-left:auto), 이 카드는
+   왼쪽(margin-right:auto)에 둔다. 절대 `.about-card` 자체를 건드리지 말고,
+   이렇게 `.contact-card`를 덧붙인 결합 셀렉터로만 오버라이드할 것.
+   `top`(relative 오프셋)으로 아래쪽으로 살짝 더 내렸다 — margin-top/bottom
+   (straddle이 두 섹션을 끌어당기는 양) 자체는 About 카드와 동일하게 유지하고
+   싶어서, 레이아웃에 영향 없는 시각적 오프셋만 추가했다. */
+.about-card.contact-card { margin-left: 0; margin-right: auto; top: clamp(2rem, 5vw, 4rem); }
+
+/* Mono italic body copy — matches the "ROLE — DESIGNER" label's font family
+   instead of the display serif, per the straddle-card reference (§2.5). */
+.about-quote {
+  font-family: var(--font-mono);
+  font-style: italic;
+  font-weight: 400;
+  font-size: clamp(1.1rem, 2.3vw, 1.5rem); /* 24px per Figma */
+  line-height: 2.08; /* 49.92px / 24px per Figma */
+  letter-spacing: -0.017em;
+  margin: 0;
+}
+
+/* ==========================================================================
+   Contact
+   ========================================================================== */
+
+/* 2026-07-29: 사용자 요청으로 섹션 안의 텍스트/링크(LET'S TALK 헤딩,
+   EMAIL/INSTAGRAM/BEHANCE 리스트)를 전부 제거했다. 이전에 콘텐츠 레이아웃에
+   쓰던 .contact-title, .mono-list*, .placeholder-link 규칙은 더 이상
+   어디서도 쓰이지 않아 함께 지웠다.
+   높이 이력: 90svh → 30svh → 60svh → 68svh(고정 svh 기반) → **같은 날 다시,
+   이미지 하나를 넣으면서 고정 높이 자체를 없앴다** — 이제 `display:flex`로
+   이미지를 가로/세로 중앙 정렬하고, 상하 padding을 균등하게 줘서 섹션 높이가
+   "이미지 크기 + 여백"으로 자연스럽게 정해지도록 했다(더 이상 svh 값 없음). */
+.contact {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: clamp(3rem, 8vw, 6rem) clamp(1.25rem, 4vw, 2.5rem);
+}
+
+.contact-frame {
+  position: relative;
+  width: 100%;
+  max-width: 46.875rem; /* 750px — About/Contact 스트래들 카드와 동일한 콘텐츠 폭으로 통일 */
+  container-type: inline-size; /* 아래 .contact-info의 cqw 단위가 이 폭 기준으로 스케일되게 */
+}
+
+.contact-image {
+  display: block;
+  width: 100%;
+  height: auto; /* 원본 비율(2528:1696) 유지 */
+}
+
+/* 2026-07-29: 이미지에 그려진 Email/Instagram/Phone 점선 위에 겹치는 실제 연락처 텍스트.
+   좌표는 원본 이미지(1600×1073px 리사이즈본 기준) 픽셀 위치를 px/1600*100 = cqw로 환산한 값 —
+   이미지가 width:100%로 스케일돼도 cqw가 컨테이너 폭 기준이라 동일 비율로 따라 움직인다. */
+.contact-info {
+  position: absolute;
+  display: flex;
+  align-items: flex-end;
+  margin: 0;
+  padding: 0;
+  border: none;
+  background: none;
+  font-family: var(--font-mono);
+  font-style: italic;
+  font-weight: 400;
+  font-size: 2.85cqw;
+  line-height: 1;
+  color: #E74B79;
+  text-decoration: none;
+  text-underline-offset: 0.2em;
+  white-space: nowrap;
+  cursor: pointer;
+}
+
+.contact-info:hover,
+.contact-info:focus-visible {
+  text-decoration: underline;
+}
+
+.contact-info.is-copied {
+  text-decoration: underline;
+}
+
+.contact-info--email {
+  left: 54.3125cqw;
+  top: 31.125cqw;
+  height: 2.25cqw;
+}
+
+.contact-info--instagram {
+  left: 61.5cqw;
+  top: 36cqw;
+  height: 2.75cqw;
+}
+
+.contact-info--phone {
+  left: 54.375cqw;
+  top: 40.6875cqw;
+  height: 2.25cqw;
+}
+
+.contact-info-toast {
+  position: absolute;
+  left: 0;
+  bottom: 100%;
+  margin-bottom: 0.3em;
+  padding: 0.2em 0.6em;
+  font-family: var(--font-mono);
+  font-style: normal;
+  font-weight: 500;
+  font-size: 0.5em;
+  letter-spacing: 0.04em;
+  text-transform: uppercase;
+  background: #E74B79;
+  color: #F3E7D3;
+  border-radius: 2px;
+  opacity: 0;
+  pointer-events: none;
+  transition: opacity 0.25s ease;
+}
+
+.contact-info.is-copied .contact-info-toast {
+  opacity: 1;
+}
+
+/* 2026-07-28: 사용자 요청으로 배경색만 고정 (data-bg="light" 공용 규칙 override) */
+#contact {
+  background: #FFFFFF;
+}
+
+/* ==========================================================================
+   Footer
+   ========================================================================== */
+
+.site-footer {
+  background: var(--bg-dark);
+  color: var(--ink-on-dark);
+  opacity: 0.6;
+  text-align: center;
+  padding: 1.5rem 1rem 2rem;
+}
+
+/* ==========================================================================
+   Custom cursor (desktop only, §5 "허용")
+   ========================================================================== */
+
+@media (hover: hover) and (pointer: fine) {
+  .cursor-dot {
+    position: fixed;
+    top: 0; left: 0;
+    width: 10px; height: 10px;
+    border-radius: 50%;
+    background: var(--accent);
+    pointer-events: none;
+    z-index: 999;
+    transform: translate(-50%, -50%);
+    transition: width 0.2s ease, height 0.2s ease, opacity 0.2s ease;
+    mix-blend-mode: difference;
+  }
+  .cursor-dot.is-active { width: 34px; height: 34px; }
+}
+
+/* ==========================================================================
+   Responsive (§5)
+   ========================================================================== */
+
+@media (max-width: 1023px) {
+  .work-grid { grid-template-columns: repeat(2, 1fr); }
+}
+
+@media (max-width: 767px) {
+  .site-nav {
+    position: fixed;
+    top: var(--header-h);
+    left: 0;
+    right: 0;
+    flex-direction: column;
+    gap: 0;
+    background: var(--bg-dark);
+    color: var(--ink-on-dark);
+    transform: translateY(calc(-100% - var(--header-h)));
+    transition: transform 0.3s ease, visibility 0s linear 0.3s;
+    padding: 0.5rem clamp(1.25rem, 4vw, 2.5rem) 1.5rem;
+    visibility: hidden;
+  }
+
+  .site-nav.is-open {
+    transform: translateY(0);
+    visibility: visible;
+    transition: transform 0.3s ease;
+  }
+
+  .site-nav a {
+    padding: 0.9rem 0;
+    border-bottom: 1px solid rgba(243, 231, 211, 0.15);
+    min-height: 44px;
+    display: flex;
+    align-items: center;
+  }
+
+  .hamburger { display: flex; }
+
+  .work-grid { grid-template-columns: 1fr; }
+  .work-card[data-featured="true"] { grid-column: span 1; }
+
+  .gen-window { width: clamp(120px, 40vw, 170px); }
+  .gen-window--a { top: 10%; left: 6%; }
+  .gen-window--d { top: auto; bottom: 8%; right: 6%; left: auto; }
+  /* Only 2 windows on mobile to avoid clutter (§2.4) */
+  .gen-window--b,
+  .gen-window--c { display: none; }
+
+  .about-card {
+    margin-top: 0;
+    margin-bottom: 0;
+    margin-left: 0;
+    padding: clamp(1.5rem, 6vw, 2.5rem);
+  }
+
+  /* 모바일: 검정 페이지까지 보여줄 화면 폭이 없으므로 스프레드 대신 사진(왼쪽
+     페이지, 전체의 약 48%)만 잘라 확대해서 위에 두고, 패널은 아래로 스택. */
+  .ip-stage-wrap { padding: 16px; align-items: flex-start; }
+  .ip-stage { position: static; width: 100%; aspect-ratio: auto; display: flex; flex-direction: column; gap: 20px; }
+  .ip-photo-crop { position: relative; inset: auto; aspect-ratio: 607/848; width: 100%; }
+  .ip-photo-base { width: 208.3%; object-position: left top; }
+  #ip-spot-phone { left: 0.67%; width: 27.02%; }
+  #ip-spot-magazine { left: 13.19%; width: 29.67%; }
+  #ip-spot-cocktail { left: 33.13%; width: 24.23%; }
+  #ip-spot-bag { left: 75.48%; width: 21.42%; }
+  .ip-panel-col { position: static; left: auto; right: auto; top: auto; bottom: auto; border-top: 1px solid rgba(243,233,218,.14); padding-top: 20px; }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  html { scroll-behavior: auto; }
+  .scroll-cue-line { animation: none; }
+  .work-card .media img,
+  .work-card .media video { transition: none; }
+  #interactive *, #interactive *::before, #interactive *::after {
+    animation: none !important;
+    transition: none !important;
+  }
+}

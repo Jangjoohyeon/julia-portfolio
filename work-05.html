@@ -1,0 +1,34 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>JULIA — Portfolio</title>
+<meta name="description" content="브랜드 제품 3D 무빙 포스터 프로젝트 — 영상과 포트폴리오 PDF를 이어붙인 전용 페이지.">
+<link rel="stylesheet" href="css/portfolio-page.css">
+</head>
+<body>
+
+<main class="pf-page">
+  <div class="pf-video-section pf-full-bleed">
+    <div class="pf-video-inner">
+      <video class="pf-media pf-media--compact" autoplay muted loop playsinline disablePictureInPicture disableRemotePlayback
+        aria-label="브랜드 제품 3D 무빙 포스터 영상 — Blender로 제작한 3D 공간·모션 숏폼">
+        <source src="assets/documents/portfolio3-video.mp4" type="video/mp4">
+      </video>
+    </div>
+  </div>
+  <img class="pf-media pf-full-bleed" src="assets/documents/portfolio3-pages/page-1.jpg" alt="포트폴리오 PDF 1페이지 — 브랜드 제품 3D 무빙 포스터 / 숏폼 제작 프로젝트 소개">
+</main>
+
+<script>
+  const v = document.querySelector('.pf-media[autoplay]');
+  if (v) {
+    v.play().catch(() => {});
+    document.addEventListener('visibilitychange', () => {
+      if (!document.hidden) v.play().catch(() => {});
+    });
+  }
+</script>
+</body>
+</html>

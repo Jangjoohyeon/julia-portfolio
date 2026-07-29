@@ -1,0 +1,101 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>JULIA — Portfolio</title>
+<meta name="description" content="Figma를 활용한 웹페이지 UI 디자인 시안 제작 및 화면 구성 설계 — 포트폴리오 상세 이미지 전용 페이지.">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@0,9..144,300;0,9..144,500;0,9..144,600;0,9..144,700;1,9..144,500&family=JetBrains+Mono:ital,wght@0,400;0,500;0,700;0,800;1,400&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --bg-light: #F3E7D3;
+    --ink-on-light: #2A1D17;
+    --accent: #DFA6A8;
+    --font-display: "Fraunces", Georgia, serif;
+    --font-mono: "JetBrains Mono", "IBM Plex Mono", ui-monospace, monospace;
+  }
+
+  * {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+  }
+
+  body {
+    background: var(--bg-light);
+    color: var(--ink-on-light);
+  }
+
+  .p09-header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 1rem;
+    padding: 0.85rem 1.5rem;
+    background: var(--bg-light);
+    border-bottom: 1px solid rgba(42, 29, 23, 0.15);
+  }
+
+  .p09-back {
+    flex: 0 0 auto;
+    font-family: var(--font-mono);
+    font-size: 0.78rem;
+    letter-spacing: 0.05em;
+    text-transform: uppercase;
+    color: var(--ink-on-light);
+    text-decoration: none;
+    white-space: nowrap;
+  }
+
+  .p09-back:hover,
+  .p09-back:focus-visible { text-decoration: underline; }
+
+  .p09-title {
+    flex: 1 1 auto;
+    min-width: 0;
+    margin: 0 1rem;
+    font-family: var(--font-display);
+    font-size: clamp(0.8rem, 1.5vw, 1.05rem);
+    font-weight: 600;
+    text-align: center;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+  }
+
+  .p09-visit {
+    flex: 0 0 auto;
+    font-family: var(--font-mono);
+    font-size: 0.72rem;
+    letter-spacing: 0.05em;
+    text-transform: uppercase;
+    background: var(--accent);
+    color: var(--ink-on-light);
+    text-decoration: none;
+    padding: 0.5rem 0.95rem;
+    border-radius: 999px;
+    white-space: nowrap;
+    transition: opacity 0.15s ease;
+  }
+
+  .p09-visit:hover,
+  .p09-visit:focus-visible { opacity: 0.78; }
+
+  img {
+    display: block;
+    width: 100%;
+    height: auto;
+  }
+</style>
+</head>
+<body>
+  <header class="p09-header">
+    <a class="p09-back" href="/#work">← Back</a>
+    <p class="p09-title">Figma를 활용한 웹페이지 UI 디자인 시안 제작 및 화면 구성 설계</p>
+    <a class="p09-visit" href="https://xn--p89aj74ac7bis6a.com/" target="_blank" rel="noopener noreferrer">Visit Live Site ↗</a>
+  </header>
+  <img src="assets/documents/work-09-portfolio.png" alt="AI 생성 이미지 렌더 프로젝트 포트폴리오 상세 이미지">
+</body>
+</html>

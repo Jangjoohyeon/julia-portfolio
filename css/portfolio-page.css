@@ -1,0 +1,75 @@
+/* 전용 포트폴리오 페이지 (work-02.html, work-05.html 등) — 콘텐츠(영상+PDF 페이지)만 보이는
+   미니멀 레이아웃. 메인 사이트의 site-header/nav/섹션 스타일은 의도적으로 가져오지 않는다. */
+
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+html,
+body {
+  background: #F3E7D3;
+}
+
+/* 페이지 전체를 어두운 배경으로 쓰는 변형(work-03.html) — opt-in 클래스라
+   기본 배경(work-02/05.html의 #F3E7D3)에는 영향 없음. */
+body.pf-page-dark {
+  background: #212121;
+}
+
+/* 3열 그리드(가장자리 1fr + 가운데 최대 1100px + 가장자리 1fr) — 기본 콘텐츠는 가운데 칸에,
+   .pf-full-bleed는 3칸 전부를 차지해 스크롤바 유무와 무관하게 정확히 뷰포트 폭까지 채운다
+   (100vw + margin-left:calc(50%-50vw) 방식은 세로 스크롤바가 있으면 몇 px씩 어긋나서 그리드로 대체). */
+body {
+  display: grid;
+  grid-template-columns: 1fr min(68.75rem, 100%) 1fr; /* 1100px */
+}
+
+/* .pf-page는 자기 자신의 박스를 만들지 않고 자식들을 body 그리드에 직접 참여시킨다. */
+.pf-page {
+  display: contents;
+}
+
+.pf-media,
+.pf-video-section {
+  grid-column: 2;
+}
+
+.pf-media {
+  display: block;
+  width: 100%;
+  height: auto;
+}
+
+video.pf-media {
+  pointer-events: none; /* 클릭/호버로 인한 정지, PiP 버튼 노출 방지 */
+}
+
+/* 세로(4:5 등) 영상처럼 컨테이너 폭 100%로 두면 지나치게 커지는 경우를 위한 축소 모디파이어.
+   PDF 페이지 폭에 맞추는 게 아니라(요청에 따라) 그냥 비율 유지한 채 더 작게 — 가운데 정렬.
+   .pf-video-inner(최대 1100px)를 기준으로 50%를 계산하므로 섹션 배경이 풀블리드로 넓어져도
+   영상 자체의 실제 크기는 바뀌지 않는다. */
+.pf-media.pf-media--compact {
+  width: 50%;
+  margin: 0 auto;
+}
+
+/* 가운데 칸(최대 1100px) 밖으로 그리드 3칸 전부까지 뷰포트 끝까지 빠져나가는 유틸리티 —
+   위 .pf-media,.pf-video-section{grid-column:2}보다 나중에 선언돼 동일 specificity에서
+   grid-column:1/-1이 이긴다. */
+.pf-full-bleed {
+  grid-column: 1 / -1;
+}
+
+.pf-video-section {
+  background: #212121;
+  display: flex;
+  justify-content: center;
+}
+
+/* 영상의 50% 크기 기준을 풀블리드 이전과 동일한 1100px 폭으로 고정하는 안쪽 래퍼. */
+.pf-video-inner {
+  width: 100%;
+  max-width: 68.75rem; /* 1100px */
+}
