@@ -323,3 +323,46 @@ About 카드·Gen-Window Showcase 다음에 스크롤로 자연스럽게 이어�
 ## 7. 기술 스택 관련 메모
 
 프레임워크는 자유롭게 선택 가능하나, 자산 교체 용이성(4절)과 반응형 요구사항(5절)을 만족해야 한다. 특별한 이유가 없다면 정적 HTML/CSS/바닐라 JS(또는 Vite 기반 경량 빌드) 로 시작해 배포 마찰을 최소화하는 것을 권장한다.
+
+---
+
+## 8. 배포 (GitHub Pages) — 2026-07-29
+
+- **저장소**: `https://github.com/Jangjoohyeon/julia-portfolio` (public, 기본 브랜치 `main`)
+- **라이브 URL**: `https://jangjoohyeon.github.io/julia-portfolio/`
+- **배포 방식**: GitHub Pages "legacy" 빌드(Jekyll 아님, 순수 정적 파일을 `main` 브랜치 루트(`/`)에서 그대로 서빙) — 별도 빌드 스텝이 없어 이 프로젝트의 "빌드 도구 없는 정적 사이트" 원칙(7절)과 그대로 맞는다.
+- **GitHub CLI(`gh`)를 로컬에 설치**해 저장소 생성(`gh repo create ... --push`)과 Pages 활성화(`gh api repos/.../pages -X POST -f "source[branch]=main" -f "source[path]=/"`)를 전부 커맨드로 처리했다 — 사용자가 브라우저에서 한 작업은 `gh auth login --web`이 띄운 일회성 코드를 `https://github.com/login/device`에서 입력하고 승인한 것 하나뿐.
+
+### 8.1 배포 전 정리한 것들
+
+- **`.gitignore` 추가**: 사이트에서 실제로 참조되지 않는 루트의 원본/스크린샷/작업 파일들(예: `Not This Time.mp4`, `장주현_최종 마린세르.mp4`, `장주현_무빙포스터_블렌더.mp4`, 각종 `스크린샷 *.png`, 미사용 `militaryscribe.ttf` — 실제 쓰이는 폰트 파일은 `assets/fonts/militaryscribe.woff2`)와 `.claude/`(Claude Code 로컬 도구 권한 설정, 사이트 콘텐츠 아님)를 제외했다. 제외 전 `grep`으로 이 파일들이 `index.html`/`work-*.html`/`portfolio-10.html` 어디에서도 참조되지 않음을 확인한 뒤에만 목록에 넣었다 — 실제로 쓰이는 자산은 절대 gitignore하지 않는다는 원칙.
+- **영상 2개 압축(GitHub의 파일당 100MB 하드 제한 때문에 필수였음)**:
+  - `assets/documents/portfolio4-video.mp4`(work-03 전용 페이지용, 원래 2160×2880/17.4초/**105MB**) → `imageio_ffmpeg`가 제공하는 번들 ffmpeg 바이너리로 1080×1440 스케일 다운 + `libx264 -crf 26 -preset slow -an`(무음 처리 — 사이트에서 항상 `muted` 재생이라 오디오 트랙 자체가 무의미) 재인코딩 → **5.0MB**.
+  - `assets/documents/portfolio5-video.mp4`(work-08 전용 페이지용, 원래 1920×1080/3분1초/**224MB**) → 1280×720 스케일 다운 + 동일 설정 재인코딩 → **25MB**.
+  - 압축 전후 프레임을 직접 캡처해 육안 비교했고(동일 타임코드 프레임 저장 후 Read 도구로 확인), 화질 차이가 실질적으로 없음을 확인한 뒤에만 원본을 교체했다. 두 파일 모두 사이트 안에서 최대 1100px 폭 컨테이너에 표시되므로(§2.4) 1080/1280px 폭이면 화질 손실 없이 충분하다.
+  - `portfolio2-video.mp4`(57MB, work-02용)는 100MB 미만이라 압축하지 않고 그대로 뒀다 — push 시 "50MB 넘는 파일" 경고만 뜨고 차단되지는 않음(GitHub의 하드 리밋은 100MB, 50MB는 소프트 경고일 뿐).
+  - **주의**: 나중에 이 두 영상을 다시 원본 화질로 교체하고 싶다면, 압축 전 원본 소스가 이미 프로젝트 루트에 있던 `toven ai 브랜드 필름.mp4`(work-03 소스, `핸디_TOVEN ai brand film storyboard` 폴더)와 `Not This Time.mp4`(work-08 소스, 루트에 있었으나 `.gitignore`로 제외됨 — 로컬에는 남아있음)이니, 다시 압축할 때 이 파일들에서 시작하면 된다. 단, 100MB를 넘기면 다시 push가 막히므로 GitHub에 그대로 올리려면 압축이 필수라는 점은 변하지 않는다.
+- **git 사용자 정보**는 이미 전역 설정(`Jangjoohyeon` / `noeyhuj@naver.com`)이 있어 별도 설정 없이 그대로 커밋에 사용했다.
+
+### 8.2 앞으로 사이트를 수정하고 다시 배포하려면
+
+로컬에서 파일을 수정한 뒤, 아래 3줄만 터미널(Git Bash)에서 실행하면 몇 분 안에 라이브 사이트에 반영된다 (GitHub Pages가 push마다 자동으로 다시 빌드함 — 별도로 "배포" 버튼을 누르는 절차가 없음):
+
+```bash
+git add -A
+git commit -m "설명"
+git push
+```
+
+- 새로 추가하는 영상 파일이 100MB를 넘으면 push 자체가 거부된다 — 이 경우 8.1처럼 ffmpeg로 스케일/CRF를 낮춰 재인코딩부터 할 것.
+- `.gitignore`에 걸리는 파일(루트의 원본 소스 영상/스크린샷 등)은 아무리 `git add -A`를 해도 커밋에 안 들어간다 — 의도된 동작이다.
+
+### 8.3 GitHub Pages 특유의 버그 — 실제로 터졌던 문제와 수정
+
+배포 직후 라이브 사이트를 직접 열어 확인하는 과정에서 **Work Gallery 썸네일 10개와 카드 클릭 링크가 전부 깨져 있는 심각한 버그를 발견하고 그 자리에서 고쳤다.**
+
+- **원인**: `assets/work/works.json`의 모든 `src`/`link` 값이 `/assets/work/images/work-01.jpg`, `/work-02.html`처럼 **`/`로 시작하는 루트 상대경로**였다. 로컬 개발 서버(`python -m http.server`)는 프로젝트 폴더 자체가 도메인 루트라서 이 경로가 우연히 맞아떨어졌지만, GitHub Pages는 이 저장소를 도메인 루트가 아니라 `https://jangjoohyeon.github.io/julia-portfolio/` **서브패스**에서 서빙한다 — 그래서 `/assets/...`를 브라우저가 그대로 해석하면 `julia-portfolio`가 빠진 `https://jangjoohyeon.github.io/assets/...`를 가리키게 되어 전부 404가 났다. `index.html`이나 각 `work-*.html` 자체의 자산 경로(`css/style.css`, `assets/documents/portfolio4-video.mp4` 등)는 처음부터 `/` 없는 문서 상대경로였어서 이 문제가 없었다 — `works.json`만 예외적으로 절대경로였던 것.
+- **발견 경위**: 배포 직후 라이브 URL을 브라우저로 열어 스크린샷만 봤을 때는 Hero/About 섹션이 정상이라 문제를 못 느꼈다 — 실제로 `fetch()`로 각 이미지/링크의 HTTP 상태 코드를 직접 확인하고 나서야 전부 404라는 걸 알았다. **교훈: 배포 검증은 스크린샷만으로 끝내지 말고, `fetch(url).then(r=>r.status)`처럼 실제 자산 URL의 HTTP 상태 코드를 하나하나 확인할 것** — 특히 이번처럼 로컬 환경과 배포 환경의 "사이트 루트" 위치가 다를 수 있는 배포에서는 필수.
+- **수정**: `works.json`의 `src`/`link`(및 스키마상 존재하는 `poster`) 값 전부에서 맨 앞 `/`만 제거해 문서 상대경로로 통일했다(`/assets/work/images/work-01.jpg` → `assets/work/images/work-01.jpg`, `/work-02.html` → `work-02.html` 등, 총 20곳). 이 방식은 로컬(도메인 루트)과 GitHub Pages(서브패스) 양쪽에서 전부 문제없이 동작한다 — `js/main.js`의 `createWorkCard`가 이 값을 그대로 `<img src>`/`<a href>`에 대입하면, 브라우저가 항상 **현재 페이지(index.html)의 위치를 기준**으로 상대경로를 해석하기 때문이다.
+- **재검증**: 수정 커밋을 push한 뒤 실제 라이브 사이트에서 10개 썸네일 전부 스크린샷으로 렌더링 확인 + `fetch(url,{method:'HEAD'})`로 10개 카드 링크(PDF 4개, 전용 페이지 6개) 전부 `status:200` 확인.
+- **앞으로 지킬 규칙**: `works.json`에 새 항목을 추가할 때 `src`/`link`/`poster`는 **항상 `/`로 시작하지 않는 상대경로**로 쓸 것 (`assets/work/images/work-11.jpg`, `work-11.html`처럼). 이 프로젝트의 다른 모든 경로(CSS의 `url()`, 각 HTML의 `<link>`/`<script>`/`<img>`/`<video>`/`<source>`)는 이미 전부 상대경로라 이 문제가 없다는 것도 이번에 전수 확인(grep)했다.
